@@ -1,0 +1,19 @@
+{
+  "TableName": "fruitsTable",
+  "KeySchema": [
+    {
+      "AttributeName": "fruitsID",
+      "KeyType": "HASH"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "fruitsID",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  }
+}
