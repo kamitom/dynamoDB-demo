@@ -1,12 +1,22 @@
 const AWS = require('aws-sdk');
 
-AWS.config.update({
-    region: 'local',
-    endpoint: 'http://localhost:8000'
+// AWS.config.update({
+//     region: 'local',
+//     endpoint: 'http://localhost:8000'
+// });
+
+
+var credentials_tomrd = new AWS.SharedIniFileCredentials({
+    profile: 'tomrd'
 });
+AWS.config.credentials = credentials_tomrd;
 
 
-const dynamodb = new AWS.DynamoDB();
+// const dynamodb = new AWS.DynamoDB();
+    const dynamodb = new AWS.DynamoDB({
+        region: 'us-east-2',
+        apiVersion: '2012-08-10'
+    });
 
 const params = {
     TableName : "Movies",
@@ -19,8 +29,8 @@ const params = {
         { AttributeName: "title", AttributeType: "S" }
     ],
     ProvisionedThroughput: {       
-        ReadCapacityUnits: 10, 
-        WriteCapacityUnits: 10
+        ReadCapacityUnits: 3, 
+        WriteCapacityUnits: 3
     }
 };
 
