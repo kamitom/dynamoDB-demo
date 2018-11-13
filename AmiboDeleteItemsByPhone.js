@@ -45,7 +45,6 @@ if (forDev === 'dev') {
 
 }
 
-
 //產生min到max之間的亂數
 function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -92,7 +91,6 @@ exports.AmiboQryByPhone = (cogUser) => {
     };
 
     client.listUsers(params, (err, data) => {
-
         if (err) {
             console.log(err.message);
             return [];
@@ -386,36 +384,3 @@ exports.AmiboDeleteCognitoUser = (event, context, callback) => {
     });
 };
 
-// create one item
-exports.helen123 = (event, context, callback) => {
-    const params = {
-        Item: {
-            "UserId": {
-                S: `user_${Math.random()}`
-            },
-            "Age": {
-                N: `${getRandom(20,63)}`
-                // N: event.age
-            },
-            "Height": {
-                N: `${getRandom(55,73)}`
-                // N: event.height
-            },
-            "Income": {
-                N: `${getRandom(2888,9999)}`
-                // N: event.income
-            }
-
-        },
-        TableName: "compare-yourself"
-    }
-    dynamodb.putItem(params, function (err, data) {
-        // body...
-        if (err) {
-            console.log(err.message);
-        } else {
-            console.log(data);
-            //    console.log("Added item:", JSON.stringify(data, null, 2));
-        }
-    });
-};

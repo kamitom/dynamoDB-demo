@@ -1,9 +1,5 @@
-const dyna = require('./dynamo1');
-
-// add dummy item
-// for (let index = 0; index < 4; index++) {
-//     dyna.helen123();  
-// }
+// const dyna = require('./dynamo1');
+const dyna = require('./AmiboDeleteItemsByPhone');
 
 // todo: qry Amibo_Dev
 var PK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
@@ -12,8 +8,7 @@ var SK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
 // dyna.qryAmibo_Dev(PK, SK);
 
 // todo: delete Cognito User
-// dyna.deleteCognitoUser();
-
+// dyna.AmiboDeleteCognitoUser();
 
 // list users
 // +886905936282
