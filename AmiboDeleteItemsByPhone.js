@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 
 //TODO: 使用自已的credentails 
-const forDev = 'dev';
+const forDev = 'cc';
 let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
@@ -241,7 +241,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                             itemsArray4_1.forEach(element4 => {
                                 // console.log(element);
                                 var params412_1 = element4;
-                                console.log(params412_1);
+                                // console.log(params412_1);
                                 //deleteitem
                                 dynamodb.deleteItem(params412_1, function(err, data4_1){
                                     if (err) {

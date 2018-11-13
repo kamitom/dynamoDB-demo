@@ -9,7 +9,7 @@ var SK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
 
 // todo: delete Cognito User
 let cogHaloUsr = 'halo12';
-dyna.AmiboDeleteCognitoUser(cogHaloUsr);
+// dyna.AmiboDeleteCognitoUser(cogHaloUsr);
 
 // list users
 // +886905936282
@@ -22,10 +22,11 @@ let cogUser = '+886971088033';
 cogUser = '+886939719255'; //error data? UNCONFIRMED!
 cogUser = '+886905936283';  // 0 record?
 cogUser = '+886975185317';  //M: 5; D: 107;
+cogUser = '+886921789792';
 
 // cogUser = '+88693';
 // todo: query by phone
-dyna.AmiboQryByPhone(cogUser);
+// dyna.AmiboQryByPhone(cogUser);
 // console.log('ans is ' + take_PK);
 
 // todo: batch delete by Phone
