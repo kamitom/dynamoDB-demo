@@ -237,6 +237,7 @@ exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
                         console.log(objTest.Items.length); // 4
 
                         let item1;
+                        let item2;
                         let WhatINeed;
                         for (let index = 0; index < objTest.Items.length; index++) {
 
@@ -244,6 +245,19 @@ exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
                             // console.log(objTest.Items[index]);
                             WhatINeed = (objTest.Items[index]);
                             console.log(WhatINeed.PK, WhatINeed.SK);
+                            item2 = {
+                                DeleteRequest: {
+                                    Key: {
+                                        'PK': {
+                                            S: WhatINeed.PK.S
+                                        },
+                                        'SK': {
+                                            S: WhatINeed.SK.S
+                                        }
+                                    },
+                                },
+                            };
+                            itemsArray.push(item2);
                             // let tom1 = (objTest.Items[index]) => {
                             //     console.log(tom1.SK);
                             // }
@@ -252,32 +266,13 @@ exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
                             console.log('===');
                             // todo end
 
-                            for (let key in objTest.Items[index])
-                            {
-                                if (key === 'SK') {
-                                    // console.log(key, objTest.Items[index][key]);
-                                    item1 = {
-                                        DeleteRequest: {
-                                            Key: {
-                                                'PK': {
-                                                    S: 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c'
-                                                },
-                                                'SK': {
-                                                    S: 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c-test2'
-                                                }
-                                            },
-                                        },
-                                    };
-                                    itemsArray.push(item1);
-                                }
-                                
-                            }
+                           
                         }
                         // console.log(itemsAray);
                         for (let key in itemsArray) {
                             if (itemsArray.hasOwnProperty(key)) {
                                 let element = itemsArray[key];
-                                // console.log(element);
+                                console.log(element);
                                 // itemsArray2.push(element);
                             }
                         }

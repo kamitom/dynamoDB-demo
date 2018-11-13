@@ -22,9 +22,10 @@ var SK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
 let cogUser = '+886971088033';
 
 // cogUser = '+88693';
-// dyna.qryByPhone(cogUser);
+// todo: query by phone
+dyna.qryByPhone(cogUser);
 // let take_PK = dyna.qryCognitoUser(cogUser);
 // console.log('ans is ' + take_PK);
 
-dyna.batchWriteItemByPhone(cogUser);
+// dyna.batchWriteItemByPhone(cogUser);
 
