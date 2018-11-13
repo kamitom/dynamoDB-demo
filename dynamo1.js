@@ -80,9 +80,9 @@ exports.qryAmibo_Dev = (thePK, theSK, event, context, callback) => {
 }
 
 
-let m_sub;
-let d_sub;
-exports.qryByPhone = (cogUser) => {
+let mobileUser_sub;
+let device_sub;
+exports.AmiboQryByPhone = (cogUser) => {
 
     const params = {
         // 'Username': 'mobile+886905936283',
@@ -92,8 +92,6 @@ exports.qryByPhone = (cogUser) => {
         'Filter': `phone_number=\"${cogUser}\"` // starts with
         // 'Filter': 'phone_number=\"+886971088033\"'
     };
-
-    // console.log(params);
 
     client.listUsers(params, (err, data) => {
 
@@ -108,23 +106,19 @@ exports.qryByPhone = (cogUser) => {
             for (let i = 0; i < data.Users.length; i++) {
                 let test = data.Users[i].Username;
                 if (test.startsWith('device')) {
-                    d_sub = 'Device-' + data.Users[i].Attributes[1].Value;
+                    device_sub = 'Device-' + data.Users[i].Attributes[1].Value;
                 } else {
-                    m_sub = 'MobileUser-' + data.Users[i].Attributes[1].Value;
+                    mobileUser_sub = 'MobileUser-' + data.Users[i].Attributes[1].Value;
                 }
             }
-
-            // console.log ([m_sub, d_sub]);
-
-            // start --
 
             const params2 = {
                 Key: {
                     "PK": {
-                        S: m_sub
+                        S: mobileUser_sub
                     },
                     "SK": {
-                        S: m_sub
+                        S: mobileUser_sub
                     },
                 },
                 TableName: Target_table
@@ -143,12 +137,13 @@ exports.qryByPhone = (cogUser) => {
             var params3 = {
                 ExpressionAttributeValues: {
                     ":v1": {
-                        S: m_sub
+                        S: mobileUser_sub
                     }
                 },
                 KeyConditionExpression: "PK = :v1",
                 TableName: Target_table
             };
+            console.log(params3);
             dynamodb.query(params3, function (err, data) {
                 if (err) {
                     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
@@ -157,37 +152,36 @@ exports.qryByPhone = (cogUser) => {
                     console.log('mobileUser count: ' + data.Items.length);
                 }
             });
-
-
             // query MobileUser- PK -- end 
-
             // query Device- PK -- begin
-            var params4 = {
-                ExpressionAttributeValues: {
-                    ":v2": {
-                        S: d_sub
+            if (device_sub !== undefined) {
+                var params4 = {
+                    ExpressionAttributeValues: {
+                        ":v2": {
+                            S: device_sub
+                        }
+                    },
+                    KeyConditionExpression: "PK = :v2",
+                    TableName: Target_table
+                };
+                console.log(params4);
+                dynamodb.query(params4, function (err, data) {
+                    if (err) {
+                        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                    } else {
+                        // console.log("QUERY SK - succeeded:", JSON.stringify(data, null, 2));
+                        console.log('device count: ' + data.Items.length);
                     }
-                },
-                KeyConditionExpression: "PK = :v2",
-                TableName: Target_table
-            };
-            dynamodb.query(params4, function (err, data) {
-                if (err) {
-                    console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-                } else {
-                    // console.log("QUERY SK - succeeded:", JSON.stringify(data, null, 2));
-                    console.log('device count: ' + data.Items.length);
-                }
-            });
+                });
+            }
             // query Device- PK -- end 
         }
     });
-    // return [m_sub, d_sub];
 };
 
 let mobile_sub2;
 let device_sub2;
-exports.DeleteItemByPhone = (cognitoUsr, event, context, callback) => {
+exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
     const params5 = {
         // 'Username': 'mobile+886905936283',
         'UserPoolId': 'ap-southeast-1_ntfECmrjH', // amibo
@@ -197,19 +191,19 @@ exports.DeleteItemByPhone = (cognitoUsr, event, context, callback) => {
         // 'Filter': 'phone_number=\"+886971088033\"'
     };
 
-    client.listUsers(params5, (err, data) => {
+    client.listUsers(params5, (err, data5) => {
 
         if (err) {
             console.log(err.message);
             return [];
         } else {
  
-            for (let i = 0; i < data.Users.length; i++) {
-                let test = data.Users[i].Username;
+            for (let i = 0; i < data5.Users.length; i++) {
+                let test = data5.Users[i].Username;
                 if (test.startsWith('device')) {
-                    device_sub2 = 'Device-' + data.Users[i].Attributes[1].Value;
+                    device_sub2 = 'Device-' + data5.Users[i].Attributes[1].Value;
                 } else {
-                    mobile_sub2 = 'MobileUser-' + data.Users[i].Attributes[1].Value;
+                    mobile_sub2 = 'MobileUser-' + data5.Users[i].Attributes[1].Value;
                 }
 
             }
@@ -236,7 +230,7 @@ exports.DeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                     } else {
                         // console.log("QUERY Device- PK - succeeded:", JSON.stringify(data4, null, 2));
                         const DeviceCount = data4.Items.length;
-                        console.log('device count:' + DeviceCount);
+                        console.log('device count: ' + DeviceCount);
 
                         if (DeviceCount > 0 ) {
                             let item4;
@@ -323,7 +317,7 @@ exports.DeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                         objMobileUser = Object.assign({}, data2);
                         
                         const mobileUserCount = (objMobileUser.Items.length); 
-                        console.log('mobileUser count:' + mobileUserCount);
+                        console.log('mobileUser count: ' + mobileUserCount);
 
                         if (mobileUserCount > 0) {
                             let item2;
