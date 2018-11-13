@@ -8,7 +8,8 @@ var SK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
 // dyna.qryAmibo_Dev(PK, SK);
 
 // todo: delete Cognito User
-// dyna.AmiboDeleteCognitoUser();
+let cogHaloUsr = 'halo12';
+dyna.AmiboDeleteCognitoUser(cogHaloUsr);
 
 // list users
 // +886905936282

@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 
 //TODO: 使用自已的credentails 
-const forDev = 'cc';
+const forDev = 'dev';
 let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
@@ -45,11 +45,6 @@ if (forDev === 'dev') {
 
 }
 
-//產生min到max之間的亂數
-function getRandom(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 exports.qryAmibo_Dev = (thePK, theSK, event, context, callback) => {
     // thePK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
     // theSK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
@@ -77,9 +72,9 @@ exports.qryAmibo_Dev = (thePK, theSK, event, context, callback) => {
     });
 };
 
-let mobileUser_sub;
-let device_sub;
 exports.AmiboQryByPhone = (cogUser) => {
+    let mobileUser_sub;
+    let device_sub;
 
     const params = {
         // 'Username': 'mobile+886905936283',
@@ -155,9 +150,9 @@ exports.AmiboQryByPhone = (cogUser) => {
     });
 };
 
-let mobile_sub2;
-let device_sub2;
 exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
+    let mobile_sub2;
+    let device_sub2;
     const params5 = {
         // 'Username': 'mobile+886905936283',
         'UserPoolId': 'ap-southeast-1_ntfECmrjH', // amibo
@@ -205,7 +200,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                     } else {
                         // console.log("QUERY Device- PK - succeeded:", JSON.stringify(data4, null, 2));
                         const DeviceCount = data4.Items.length;
-                        console.log('device count: ' + DeviceCount);
+                        // console.log('device count: ' + DeviceCount);
 
                         if (DeviceCount > 0 ) {
                             let item4;
@@ -252,7 +247,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                                     if (err) {
                                         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                                     } else {
-                                        console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
+                                        // console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
                                     }
                                 });
                             });
@@ -292,7 +287,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                         objMobileUser = Object.assign({}, data2);
                         
                         const mobileUserCount = (objMobileUser.Items.length); 
-                        console.log('mobileUser count: ' + mobileUserCount);
+                        // console.log('mobileUser count: ' + mobileUserCount);
 
                         if (mobileUserCount > 0) {
                             let item2;
@@ -342,7 +337,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                                     if (err) {
                                         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                                     } else {
-                                        console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
+                                        // console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
                                     }
                                 });
                             });
@@ -368,9 +363,10 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
 
 };
 
-exports.AmiboDeleteCognitoUser = (event, context, callback) => {
+exports.AmiboDeleteCognitoUser = (cogUser,event, context, callback) => {
     const params = {
-        'Username': 'factorytest',
+        // 'Username': 'factorytest',
+        'Username': cogUser,
         'UserPoolId': 'us-east-2_VdUFUH85R' // tomcoon
         // 'UserPoolId': 'ap-southeast-1_ntfECmrjH' // amibo
     };
@@ -379,7 +375,7 @@ exports.AmiboDeleteCognitoUser = (event, context, callback) => {
         if (err) {
             console.log(err.message);
         } else {
-            console.log(data);
+            // console.log(data);
         }
     });
 };
