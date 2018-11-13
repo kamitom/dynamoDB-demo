@@ -6,8 +6,7 @@ let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
 // let Target_table = "AmiboTable-Dev";
-let Target_table = 'AmiboTb-Test-Tom';
-
+let Target_table = 'AmiboTb-Test-Tom1';
 
 if (forDev === 'dev') {
 
@@ -113,7 +112,6 @@ exports.qryByPhone = (cogUser) => {
                 } else {
                     m_sub = 'MobileUser-' + data.Users[i].Attributes[1].Value;
                 }
-
             }
 
             // console.log ([m_sub, d_sub]);
@@ -155,7 +153,8 @@ exports.qryByPhone = (cogUser) => {
                 if (err) {
                     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                 } else {
-                    console.log("QUERY PK - succeeded:", JSON.stringify(data, null, 2));
+                    // console.log("QUERY PK - succeeded:", JSON.stringify(data, null, 2));
+                    console.log('mobileUser count: ' + data.Items.length);
                 }
             });
 
@@ -176,7 +175,8 @@ exports.qryByPhone = (cogUser) => {
                 if (err) {
                     console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                 } else {
-                    console.log("QUERY SK - succeeded:", JSON.stringify(data, null, 2));
+                    // console.log("QUERY SK - succeeded:", JSON.stringify(data, null, 2));
+                    console.log('device count: ' + data.Items.length);
                 }
             });
             // query Device- PK -- end 
@@ -187,7 +187,7 @@ exports.qryByPhone = (cogUser) => {
 
 let mobile_sub2;
 let device_sub2;
-exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
+exports.DeleteItemByPhone = (cognitoUsr, event, context, callback) => {
     const params5 = {
         // 'Username': 'mobile+886905936283',
         'UserPoolId': 'ap-southeast-1_ntfECmrjH', // amibo
@@ -214,10 +214,98 @@ exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
 
             }
             // delete PK -- MobileUser- begin
-            var objTest;
-            let itemsArray = []; 
-            let itemsArray2 = [];
+            let objMobileUser;
+            let itemsArray1 = []; 
+            let itemsArray1_1 = [];
+            let itemsArray4 = [];
+            let itemsArray4_1 = [];
             {
+
+                var params411 = {
+                    ExpressionAttributeValues: {
+                        ":v2": {
+                            S: device_sub2
+                        }
+                    },
+                    KeyConditionExpression: "PK = :v2",
+                    TableName: Target_table
+                };
+                dynamodb.query(params411, function (err, data4) {
+                    if (err) {
+                        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                    } else {
+                        // console.log("QUERY Device- PK - succeeded:", JSON.stringify(data4, null, 2));
+                        const DeviceCount = data4.Items.length;
+                        console.log('device count:' + DeviceCount);
+
+                        if (DeviceCount > 0 ) {
+                            let item4;
+                            let item4_1;
+                            let WhatINeed4;
+                            for (let index = 0; index < data4.Items.length; index++) {
+                                // const element = array[index];
+                                WhatINeed4 = data4.Items[index];
+                                // console.log(WhatINeed4.PK, WhatINeed4.SK);
+                                // console.log('------');
+                                item4 = {
+                                    DeleteRequest: {
+                                        Key: {
+                                            'PK': {
+                                                S: WhatINeed4.PK.S
+                                            },
+                                            'SK': {
+                                                S: WhatINeed4.SK.S
+                                            }
+                                        },
+                                    },
+                                };
+                                item4_1 = {
+                                    Key: {
+                                        'PK': {
+                                            S: WhatINeed4.PK.S
+                                        },
+                                        'SK': {
+                                            S: WhatINeed4.SK.S
+                                        }
+                                    },
+                                    TableName: Target_table,
+                                };
+                                itemsArray4.push(item4);
+                                itemsArray4_1.push(item4_1);
+                            }
+
+                            itemsArray4_1.forEach(element4 => {
+                                // console.log(element);
+                                var params412_1 = element4;
+                                console.log(params412_1);
+                                //deleteitem
+                                dynamodb.deleteItem(params412_1, function(err, data4_1){
+                                    if (err) {
+                                        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                                    } else {
+                                        console.log("delete Device - PK - succeeded:", JSON.stringify(data4_1, null, 2));
+                                    }
+                                });
+                            });
+    
+                            var params412 = {
+                                RequestItems: {
+                                    'AmiboTb-Test-Tom1': itemsArray4
+                                }
+                            };
+
+                            // console.log(params412);
+                            // dynamodb.batchWriteItem(params412, function (err, data) {
+                            //     if (err) {
+                            //         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                            //     } else {
+                            //         console.log("delete Device - PK - succeeded:", JSON.stringify(data, null, 2));
+                            //     }
+                            // });
+                        }
+                    }
+                });
+
                 var params311 = {
                     ExpressionAttributeValues: {
                         ":v1": {
@@ -232,21 +320,34 @@ exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
                         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                     } else {
                         // console.log("QUERY MobileUser- PK - succeeded:", JSON.stringify(data2, null, 2));
-                        objTest = Object.assign({}, data2);
+                        objMobileUser = Object.assign({}, data2);
                         
-                        console.log(objTest.Items.length); // 4
+                        const mobileUserCount = (objMobileUser.Items.length); 
+                        console.log('mobileUser count:' + mobileUserCount);
 
-                        let item1;
-                        let item2;
-                        let WhatINeed;
-                        for (let index = 0; index < objTest.Items.length; index++) {
-
-                            // todo start
-                            // console.log(objTest.Items[index]);
-                            WhatINeed = (objTest.Items[index]);
-                            console.log(WhatINeed.PK, WhatINeed.SK);
-                            item2 = {
-                                DeleteRequest: {
+                        if (mobileUserCount > 0) {
+                            let item2;
+                            let item2_1;
+                            let WhatINeed;
+                            for (let index = 0; index < objMobileUser.Items.length; index++) {
+    
+                                // todo start
+                                // console.log(objTest.Items[index]);
+                                WhatINeed = (objMobileUser.Items[index]);
+                                // console.log(WhatINeed.PK, WhatINeed.SK);
+                                item2 = {
+                                    DeleteRequest: {
+                                        Key: {
+                                            'PK': {
+                                                S: WhatINeed.PK.S
+                                            },
+                                            'SK': {
+                                                S: WhatINeed.SK.S
+                                            }
+                                        },
+                                    },
+                                };
+                                item2_1 = {
                                     Key: {
                                         'PK': {
                                             S: WhatINeed.PK.S
@@ -255,106 +356,44 @@ exports.batchWriteItemByPhone = (cognitoUsr, event, context, callback) => {
                                             S: WhatINeed.SK.S
                                         }
                                     },
-                                },
+                                    TableName: Target_table, 
+                                };
+
+                                itemsArray1.push(item2);
+                                itemsArray1_1.push(item2_1);
+                                
+                                // todo end
+                            }
+
+                            itemsArray1_1.forEach(element1 => {
+                                var params312_1 = element1;
+                                console.log(params312_1);
+                                //deleteitem
+                                dynamodb.deleteItem(params312_1, function(err, data1_1){
+                                    if (err) {
+                                        console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                                    } else {
+                                        console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
+                                    }
+                                });
+                            });
+
+                            var params312 = {
+                                RequestItems: {
+                                    'AmiboTb-Test-Tom1': itemsArray1
+                                }
                             };
-                            itemsArray.push(item2);
-                            // let tom1 = (objTest.Items[index]) => {
-                            //     console.log(tom1.SK);
-                            // }
-                            // console.log(ready.SK);
-
-                            console.log('===');
-                            // todo end
-
-                           
+                            // dynamodb.batchWriteItem(params312, function (err, data) {
+                            //     if (err) {
+                            //         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+                            //     } else {
+                            //         console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data, null, 2));
+                            //     }
+                            // });
                         }
-                        // console.log(itemsAray);
-                        for (let key in itemsArray) {
-                            if (itemsArray.hasOwnProperty(key)) {
-                                let element = itemsArray[key];
-                                console.log(element);
-                                // itemsArray2.push(element);
-                            }
-                        }
-                        // console.log(itemsArray2);
-
-                        //batchwriteItem - start here
-                        var params3 = {
-                            RequestItems: {
-                                'AmiboTb-Test-Tom': [
-                                    {
-                                        DeleteRequest:{
-                                            Key: {
-                                                'PK': {
-                                                    S:'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c'
-                                                },
-                                                'SK': {
-                                                    S:'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c-test11'
-                                                }
-                                            },
-                                        },
-                                    },
-                                    {
-                                        DeleteRequest:{
-                                            Key: {
-                                                'PK': {
-                                                    S:'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c'
-                                                },
-                                                'SK': {
-                                                    S:'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c-test11'
-                                                }
-                                            },
-                                        },
-                                    },
-                                ]
-                            }
-            
-                        };
-
-                        var params312 = {
-                            RequestItems: {
-                                'AmiboTb-Test-Tom': itemsArray
-                            }
-                        }
-                        console.log(params312);
-                        console.log(params3);
-                        dynamodb.batchWriteItem(params312, function (err, data) {
-                            if (err) {
-                                console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-                            } else {
-                                console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data, null, 2));
-                            }
-                        });
-            
-            
-                        // delete PK -- end 
-            
-                        //batchwriteItem - end here
-
                     }
                 });
             }
-
-
-
-            // delete PK -- Device- begin
-            // var params4 = {
-            //     ExpressionAttributeValues: {
-            //         ":v2": {
-            //             S: d_sub
-            //         }
-            //     },
-            //     KeyConditionExpression: "PK = :v2",
-            //     TableName: table
-            // };
-            // dynamodb.query(params4, function (err, data) {
-            //     if (err) {
-            //         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-            //     } else {
-            //         console.log("QUERY SK - succeeded:", JSON.stringify(data, null, 2));
-            //     }
-            // });
-            // query SK -- end 
         }
     });
 
