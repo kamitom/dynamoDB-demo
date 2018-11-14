@@ -1,5 +1,5 @@
 // const dyna = require('./dynamo1');
-const dyna = require('./AmiboDeleteItemsByPhone');
+const dyna = require('./BetaAmibo');
 
 // todo: qry Amibo_Dev
 var PK = 'MobileUser-60f16463-4f9e-4c98-a492-b3e17185923c';
