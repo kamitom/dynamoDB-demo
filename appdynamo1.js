@@ -22,7 +22,7 @@ let cogUser = '+886971088033';
 cogUser = '+886939719255'; //error data? UNCONFIRMED!
 cogUser = '+886905936283';  // 0 record?
 cogUser = '+886975185317';  //M: 5; D: 107;
-cogUser = '886909996791';
+cogUser = '886905709307';
 
 // cogUser = '+88693';
 // todo: query by phone

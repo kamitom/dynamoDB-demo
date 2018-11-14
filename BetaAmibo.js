@@ -6,7 +6,7 @@ let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
 // let Target_table = "AmiboTable-Dev";
-let Target_table = 'AmiboTb-Test-Tom1';
+let Target_table = 'AmiboTb-Test-Tom2';
 
 if (forDev === 'dev') {
 
@@ -146,6 +146,8 @@ exports.AmiboQryByPhone = (cogUser, event, context, callback) => {
             }
             // query Device- PK -- end 
         }
+        console.log({'mo': mobileUser_sub, 'de': device_sub, 'phone': cogUser});
+        // callback(null, {"mobile": cogUser, "mobile_sub": mobileUser_sub, "device_sub": device_sub});
     });
 };
 

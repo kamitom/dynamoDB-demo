@@ -1,6 +1,6 @@
 const AWS = require("aws-sdk");
 
-//TODO: 使用自已的credentails 
+//TODO: 使用自已的credentails  
 const forDev = 'cc';
 let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
