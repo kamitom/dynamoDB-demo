@@ -1,14 +1,14 @@
 const AWS = require("aws-sdk");
 
 //TODO: 使用自已的credentails 
-const forDev = 'dev';
+const forDev = 'cc';
 let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
 // let Target_table = "AmiboTable-Dev";
-let Target_table = 'AmiboTb-Test-Tom1';
+let Target_table = 'AmiboTb-Test-Tom';
 
-if (forDev === 'cc') {
+if (forDev === 'dev') {
 
     var credentials_tomrd = new AWS.SharedIniFileCredentials({
         profile: 'tomrd'
@@ -45,12 +45,15 @@ if (forDev === 'cc') {
 exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
     let mobile_sub2;
     let device_sub2;
+
+    let x = event.phone;
+
     const params5 = {
         // 'Username': 'mobile+886905936283',
         'UserPoolId': 'ap-southeast-1_ntfECmrjH', // amibo
         // 'Limit': 2,
         // 'Filter': `phone_number^=\"${cognitoUsr}\"` // starts with
-        'Filter': `phone_number=\"${cognitoUsr}\"` // equals
+        'Filter': `phone_number=\"+${cognitoUsr}\"` // equals
         // 'Filter': 'phone_number=\"+886971088033\"'
     };
 
@@ -60,7 +63,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
             console.log(err.message);
             return [];
         } else {
-            // console.log(data5.Users.length);
+            console.log(data5.Users.length);
             const UserExists = (data5.Users.length);
             if (UserExists > 0) {
                 for (let i = 0; i < data5.Users.length; i++) {
@@ -255,7 +258,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
     
             }
             else {
-                console.log('User does not exist.');
+                console.log(`User: ${cognitoUsr} does not exist.`);
             }
 
         }
