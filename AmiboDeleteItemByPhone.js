@@ -6,7 +6,7 @@ let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
 // let Target_table = "AmiboTable-Dev";
-let Target_table = 'AmiboTb-Test-Tom';
+let Target_table = 'AmiboTb-Test-Tom2';
 
 if (forDev === 'dev') {
 
@@ -46,7 +46,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
     let mobile_sub2;
     let device_sub2;
 
-    let x = event.phone;
+    // let x = event.phone;
 
     const params5 = {
         // 'Username': 'mobile+886905936283',
@@ -184,7 +184,7 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
                             objMobileUser = Object.assign({}, data2);
                             
                             const mobileUserCount = (objMobileUser.Items.length); 
-                            console.log('mobileUser count: ' + mobileUserCount);
+                            // console.log('mobileUser count: ' + mobileUserCount);
     
                             if (mobileUserCount > 0) {
                                 let item2;
@@ -228,13 +228,13 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
     
                                 itemsArray1_1.forEach(element1 => {
                                     var params312_1 = element1;
-                                    console.log(params312_1);
+                                    // console.log(params312_1);
                                     //deleteitem
                                     dynamodb.deleteItem(params312_1, function(err, data1_1){
                                         if (err) {
                                             console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                                         } else {
-                                            console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
+                                            // console.log("delete MobileUser - PK - succeeded:", JSON.stringify(data1_1, null, 2));
                                         }
                                     });
                                 });
@@ -262,6 +262,8 @@ exports.AmiboDeleteItemByPhone = (cognitoUsr, event, context, callback) => {
             }
 
         }
+        // callback(null, {"mobile": cognitoUsr, "mobile_sub": mobile_sub2, "device_sub": device_sub2, "seccussful": 'deleted!'});
+        console.log('deleted!',  {"mobile": cognitoUsr, "mobile_sub": mobile_sub2, "device_sub": device_sub2, "seccussful": 'deleted!'});
     });
 
 };

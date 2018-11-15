@@ -5,8 +5,8 @@ const forDev = 'cc';
 let dyanmodb = '';
 const CognitoIdentityServiceProvider = AWS.CognitoIdentityServiceProvider;
 let client = '';
-// let Target_table = "AmiboTable-Dev";
-let Target_table = 'AmiboTb-Test-Tom2';
+let Target_table = "AmiboTable-Dev";
+// let Target_table = 'AmiboTb-Test-Tom2';
 
 if (forDev === 'dev') {
 
@@ -69,6 +69,7 @@ exports.qryAmibo_Dev = (thePK, theSK, event, context, callback) => {
     });
 };
 
+var de_count, m_count;
 exports.AmiboQryByPhone = (cogUser, event, context, callback) => {
     let mobileUser_sub;
     let device_sub;
@@ -119,6 +120,7 @@ exports.AmiboQryByPhone = (cogUser, event, context, callback) => {
                 } else {
                     // console.log("QUERY PK - succeeded:", JSON.stringify(data, null, 2));
                     console.log('mobileUser count: ' + data.Items.length);
+                    m_count = (data.Items.length);
                 }
             });
             // query MobileUser- PK -- end 
@@ -135,7 +137,7 @@ exports.AmiboQryByPhone = (cogUser, event, context, callback) => {
                     TableName: Target_table
                 };
                 console.log(params4);
-                dynamodb.query(params4, function (err, data) {
+                de_count = dynamodb.query(params4, function (err, data) {
                     if (err) {
                         console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
                     } else {
@@ -145,8 +147,10 @@ exports.AmiboQryByPhone = (cogUser, event, context, callback) => {
                 });
             }
             // query Device- PK -- end 
+
         }
-        console.log({'mo': mobileUser_sub, 'de': device_sub, 'phone': cogUser});
+        console.log({'mo': mobileUser_sub, 'de': device_sub, 'phone': cogUser,'mo_c': m_count, 'de_c': 'de_count'});
+
         // callback(null, {"mobile": cogUser, "mobile_sub": mobileUser_sub, "device_sub": device_sub});
     });
 };

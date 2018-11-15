@@ -13,8 +13,8 @@ let cogUser = '+886971088033';
 // cogUser = '+886905936283';  // 0 record?
 // cogUser = '+886975185317';  //M: 5; D: 107;
 // cogUser = '+886921789792--';
-cogUser = '+886927298020';
+cogUser = '886905936283';
 
 // todo: batch delete by Phone
-// dyna.AmiboDeleteItemByPhone(cogUser);
+dyna.AmiboDeleteItemByPhone(cogUser);
 
